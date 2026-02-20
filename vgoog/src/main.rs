@@ -2,6 +2,7 @@
 
 mod api;
 mod auth;
+mod cli;
 mod client;
 mod config;
 mod error;
@@ -13,6 +14,8 @@ use crate::ui::app::{App, Screen};
 use crate::ui::views::handlers;
 use crate::ui::views::render;
 
+use clap::Parser;
+
 use crossterm::{
     event::{self, Event, KeyCode, KeyModifiers},
     execute,
@@ -23,6 +26,12 @@ use std::io;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    let cli_args = cli::Cli::parse();
+
+    if let Some(command) = cli_args.command {
+        return run_cli(command).await;
+    }
+
     let config = if Config::exists() {
         let mut cfg = Config::load()?;
         if cfg.accounts.is_empty() {
@@ -391,6 +400,63 @@ async fn run_tui(config: Config) -> anyhow::Result<()> {
     terminal.show_cursor()?;
 
     println!("Thanks for using vgoog!");
+    Ok(())
+}
+
+// ── CLI mode ──
+
+async fn run_cli(command: cli::CliCommand) -> anyhow::Result<()> {
+    match command {
+        cli::CliCommand::Exec { service, action, args } => {
+            let config = Config::load()?;
+            let client = GoogleClient::new(config)?;
+
+            let parsed_args: serde_json::Value = args
+                .map(|s| serde_json::from_str(&s))
+                .transpose()?
+                .unwrap_or(serde_json::json!({}));
+
+            match cli::exec::execute(&client, &service, &action, parsed_args).await {
+                Ok(val) => {
+                    println!("{}", serde_json::to_string(&serde_json::json!({
+                        "ok": true,
+                        "data": val
+                    }))?);
+                }
+                Err(e) => {
+                    eprintln!("{}", serde_json::to_string(&serde_json::json!({
+                        "ok": false,
+                        "error": e.to_string()
+                    }))?);
+                    std::process::exit(1);
+                }
+            }
+        }
+        cli::CliCommand::List => {
+            println!("{}", serde_json::to_string_pretty(&cli::exec::list_all())?);
+        }
+        cli::CliCommand::Status => {
+            let config = Config::load()?;
+            let client = GoogleClient::new(config)?;
+            let api = api::gmail::GmailApi::new(&client);
+
+            match api.get_profile().await {
+                Ok(val) => {
+                    println!("{}", serde_json::to_string(&serde_json::json!({
+                        "ok": true,
+                        "data": val
+                    }))?);
+                }
+                Err(e) => {
+                    eprintln!("{}", serde_json::to_string(&serde_json::json!({
+                        "ok": false,
+                        "error": e.to_string()
+                    }))?);
+                    std::process::exit(1);
+                }
+            }
+        }
+    }
     Ok(())
 }
 

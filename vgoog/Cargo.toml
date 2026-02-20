@@ -25,6 +25,9 @@ tui-textarea = "0.7"
 anyhow = "1"
 thiserror = "2"
 
+# CLI
+clap = { version = "4", features = ["derive"] }
+
 # Utilities
 chrono = { version = "0.4", features = ["serde"] }
 base64 = "0.22"

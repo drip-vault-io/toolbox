@@ -45,6 +45,9 @@ fn default_expiry() -> DateTime<Utc> {
 
 impl Config {
     pub fn config_dir() -> Result<PathBuf> {
+        if let Ok(dir) = std::env::var("VGOOG_CONFIG_DIR") {
+            return Ok(PathBuf::from(dir));
+        }
         let dir = dirs::config_dir()
             .ok_or_else(|| VgoogError::Config("Cannot find config directory".into()))?
             .join("vgoog");
