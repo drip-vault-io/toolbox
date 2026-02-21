@@ -48,18 +48,18 @@ jobs:
           targets: ${{ matrix.target }}
 
       - name: Install cross (Linux arm64)
-        if: matrix.cross
+        if: matrix.cross == true
         run: cargo install cross --git https://github.com/cross-rs/cross
 
-      - name: Build
+      - name: Build (cross)
+        if: matrix.cross == true
         working-directory: ${{ matrix.tool }}
-        run: |
-          if [ "${{ matrix.cross }}" = "true" ]; then
-            cross build --release --target ${{ matrix.target }}
-          else
-            cargo build --release --target ${{ matrix.target }}
-          fi
-        shell: bash
+        run: cross build --release --target ${{ matrix.target }}
+
+      - name: Build (cargo)
+        if: matrix.cross != true
+        working-directory: ${{ matrix.tool }}
+        run: cargo build --release --target ${{ matrix.target }}
 
       - name: Rename binary
         run: |
