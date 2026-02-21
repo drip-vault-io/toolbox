@@ -29,6 +29,9 @@ pub enum CliCommand {
         action: String,
         /// JSON arguments (optional)
         args: Option<String>,
+        /// Account name to use (overrides active_account)
+        #[arg(long)]
+        account: Option<String>,
     },
     /// List all available services and actions
     List,

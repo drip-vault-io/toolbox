@@ -407,8 +407,19 @@ async fn run_tui(config: Config) -> anyhow::Result<()> {
 
 async fn run_cli(command: cli::CliCommand) -> anyhow::Result<()> {
     match command {
-        cli::CliCommand::Exec { service, action, args } => {
-            let config = Config::load()?;
+        cli::CliCommand::Exec { service, action, args, account } => {
+            let mut config = Config::load()?;
+
+            if let Some(ref acct_name) = account {
+                if !config.switch_account(acct_name) {
+                    eprintln!("{}", serde_json::to_string(&serde_json::json!({
+                        "ok": false,
+                        "error": format!("Account '{}' not found", acct_name)
+                    }))?);
+                    std::process::exit(1);
+                }
+            }
+
             let client = GoogleClient::new(config)?;
 
             let parsed_args: serde_json::Value = args
