@@ -11,23 +11,28 @@ permissions:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
-        tool: [vgoog]
         include:
-          - target: x86_64-unknown-linux-gnu
+          - tool: vgoog
+            target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
             suffix: linux-amd64
-          - target: aarch64-unknown-linux-gnu
+          - tool: vgoog
+            target: aarch64-unknown-linux-gnu
             os: ubuntu-latest
             suffix: linux-arm64
             cross: true
-          - target: aarch64-apple-darwin
+          - tool: vgoog
+            target: aarch64-apple-darwin
             os: macos-latest
             suffix: darwin-arm64
-          - target: x86_64-apple-darwin
+          - tool: vgoog
+            target: x86_64-apple-darwin
             os: macos-latest
             suffix: darwin-amd64
-          - target: x86_64-pc-windows-msvc
+          - tool: vgoog
+            target: x86_64-pc-windows-msvc
             os: windows-latest
             suffix: windows-amd64
             ext: .exe
