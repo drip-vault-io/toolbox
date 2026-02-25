@@ -119,21 +119,57 @@ Tools read from `~/.config/{tool}/config.toml` (or equivalent paths on Windows/m
 
 In cloud deployments, config is typically mounted from a secrets manager or injected at boot.
 
-## Adding a new tool
+## What Makes a Good Toolbox Tool
+
+Use this checklist when building or evaluating a new tool:
+
+### ✅ Agent-Friendly
+
+- [ ] **Headless operation** — Works without a TTY; no interactive prompts required
+- [ ] **JSON output** — Structured output agents can parse (not just human-readable text)
+- [ ] **Meaningful exit codes** — 0 for success, non-zero for errors, consistent across commands
+- [ ] **Stateless commands** — Each invocation is independent; no "session" to manage
+- [ ] **Clear error messages** — Errors are specific and actionable, not cryptic codes
+
+### ✅ Auth & Security
+
+- [ ] **Environment-based credentials** — Reads tokens from env vars or config files
+- [ ] **No interactive auth flows** — OAuth handled externally (web dashboard), not in the CLI
+- [ ] **vsecret compatible** — Can receive credentials via subprocess injection
+- [ ] **No credential logging** — Never prints tokens, keys, or secrets to stdout/stderr
+
+### ✅ Cloud-Ready
+
+- [ ] **Single static binary** — No runtime dependencies, no containers required
+- [ ] **Cross-platform** — Builds for Linux (amd64/arm64), macOS, Windows
+- [ ] **Small binary size** — Target <10MB; use `rustls`, LTO, strip symbols
+- [ ] **Fast startup** — Sub-second cold start; no warm-up or initialization delays
+- [ ] **Graceful degradation** — Works offline or with partial connectivity where possible
+
+### ✅ Developer Experience
+
+- [ ] **Comprehensive README** — Documents all commands, options, and examples
+- [ ] **Consistent CLI patterns** — Follows `tool <service> <action> [args]` convention
+- [ ] **TUI mode (optional)** — Interactive mode for human debugging and exploration
+- [ ] **Typed config schema** — Config files are well-documented with examples
+
+### ✅ Integration Fit
+
+- [ ] **Solves a real problem** — Addresses a clear agent use case (not just "nice to have")
+- [ ] **Web-manageable auth** — OAuth or API key can be set up through a web UI
+- [ ] **API-first design** — Wraps a well-documented, stable external API
+- [ ] **Complements existing tools** — Doesn't duplicate functionality already in toolbox
+
+---
+
+## Adding a New Tool
 
 1. Create a directory at the repo root (e.g. `mytool/`)
 2. Initialize a Rust project: `cargo init mytool`
-3. Add the tool to the matrix in `.github/workflows/release.yml`
-4. Add it to the table in this README
-5. Tag a release — CI builds and publishes binaries automatically
-
-### Design guidelines
-
-- **Support headless operation.** Tools should work without a TTY for agent invocation.
-- **Accept credentials from environment.** Don't require interactive setup.
-- **Output JSON.** Structured output that agents can parse.
-- **Keep binaries small.** Use `rustls` (no OpenSSL), enable LTO, strip symbols.
-- **Handle errors gracefully.** Return meaningful exit codes and error messages.
+3. Review the checklist above — ensure your tool meets the criteria
+4. Add the tool to the matrix in `.github/workflows/release.yml`
+5. Add it to the table in this README
+6. Tag a release — CI builds and publishes binaries automatically
 
 ## Releases
 
