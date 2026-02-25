@@ -9,7 +9,7 @@ Toolbox is one piece of a larger platform for deploying personal AI agents:
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                      Your Agent                         │
-│   (runs on cloud infrastructure like Fly.io)           │
+│       (local machine or cloud — Fly.io, etc.)          │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
 │   ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐   │
@@ -35,10 +35,10 @@ Toolbox is one piece of a larger platform for deploying personal AI agents:
 
 **Key principles:**
 
-- **Cloud-first.** Tools are designed to run in cloud environments (Fly.io machines). They read credentials from environment variables and config files, not interactive setup wizards.
+- **Runs anywhere, optimized for cloud.** Tools work on your laptop or in cloud environments (Fly.io, etc.). Credentials come from environment variables or config files — no interactive setup required, but local TUI modes are available when you want them.
 - **Zero-friction auth.** Users connect their accounts through a web dashboard with standard OAuth flows — no navigating developer consoles or pasting tokens manually.
-- **Agent-native.** Each tool exposes functionality that AI agents can invoke programmatically. The TUI modes are a bonus for human debugging, not the primary interface.
-- **Standalone binaries.** Every tool compiles to a ~3-5MB static binary with no runtime dependencies. Download, chmod, run.
+- **Agent-native.** Each tool exposes functionality that AI agents can invoke programmatically. TUI modes are available for human debugging and standalone use.
+- **Standalone binaries.** Every tool compiles to a ~3-5MB static binary with no runtime dependencies. Download, chmod, run — on any platform.
 
 ## Tools
 
@@ -78,9 +78,9 @@ chmod +x vgoog
 curl -sL https://github.com/drip-vault-io/toolbox/releases/latest/download/vgoog-windows-amd64.exe -o vgoog.exe
 ```
 
-### Cloud deployment (Fly.io)
+### Cloud deployment (Fly.io example)
 
-On Fly machines, tools are installed to `/data/bin/` at boot:
+On Fly machines, tools are typically installed to `/data/bin/` at boot:
 
 ```bash
 mkdir -p /data/bin
