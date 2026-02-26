@@ -9,14 +9,14 @@ Toolbox is one piece of a larger platform for deploying personal AI agents:
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                      Your Agent                         │
-│       (local machine or cloud — Fly.io, etc.)          │
+│       (local machine or cloud — Fly.io, etc.)           │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
-│   ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐   │
-│   │  vgoog  │  │ vlinear │  │ vnotion │  │   vai   │   │
-│   │ Google  │  │  Linear │  │ Notion  │  │   AI    │   │
-│   │Workspace│  │ Issues  │  │  Docs   │  │ Models  │   │
-│   └─────────┘  └─────────┘  └─────────┘  └─────────┘   │
+│   ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐    │
+│   │  vgoog  │  │ vlinear │  │ vnotion │  │   vai   │    │
+│   │ Google  │  │  Linear │  │ Notion  │  │   AI    │    │
+│   │Workspace│  │ Issues  │  │  Docs   │  │ Models  │    │
+│   └─────────┘  └─────────┘  └─────────┘  └─────────┘    │
 │                                                         │
 │                    Toolbox (this repo)                  │
 │          Static binaries at /data/bin/                  │
@@ -27,9 +27,9 @@ Toolbox is one piece of a larger platform for deploying personal AI agents:
                           ▼
 ┌─────────────────────────────────────────────────────────┐
 │                    Web Dashboard                        │
-│   • Connect accounts (Google, Linear, Notion, etc.)    │
-│   • Manage credentials with OAuth flows                │
-│   • No Google Cloud Console, no CLI token pasting      │
+│   • Connect accounts (Google, Linear, Notion, etc.)     │
+│   • Manage credentials with OAuth flows                 │
+│   • No Google Cloud Console, no CLI token pasting       │
 └─────────────────────────────────────────────────────────┘
 ```
 
